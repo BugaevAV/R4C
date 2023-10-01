@@ -8,7 +8,7 @@ from django.core.serializers import serialize
 
 from .models import Robot
 
-FILEPATH = "/mnt/c/Users/iustu/Downloads/robots_report.xlsx"
+FILEPATH = "robots_report.xlsx"
 
 moscow_tz = timezone('Europe/Moscow')
 current_week = moscow_tz.localize(datetime.now()).isocalendar()[1]
@@ -25,5 +25,8 @@ class RobotView(View):
             [df.filter(like=model, axis=0).to_excel(writer, startrow=1, startcol=1,
                                                      sheet_name='Модель '+model) for model in models_list]
             [value.autofit() for key, value in writer.sheets.items()]
-        return JsonResponse({'report': f' {len(robots_made)} robots are made'})
+        return JsonResponse({'report': f'Произведено роботов на текущей неделе: {len(robots_made)} шт.\
+                                         Отчет сформирован'},
+                             json_dumps_params={'ensure_ascii': False},
+                             content_type='application/json; charset=utf-8')
         
