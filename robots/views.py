@@ -1,29 +1,29 @@
-import json
-import re
+import xlsxwriter
+import pandas as pd
+from pytz import timezone
+from datetime import datetime
 from django.http import JsonResponse
 from django.views import View
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
+from django.core.serializers import serialize
 
-from .validators import *
 from .models import Robot
 
+FILEPATH = "/mnt/c/Users/iustu/Downloads/robots_report.xlsx"
 
-@method_decorator(csrf_exempt, name='dispatch')
+moscow_tz = timezone('Europe/Moscow')
+current_week = moscow_tz.localize(datetime.now()).isocalendar()[1]
+
 class RobotView(View):
 
-    def post(self, request):
-        request_body = json.loads(request.body)
-        validated_robot_data = {
-            'model': validate_robot_version_model(request_body.get('model')),
-            'version': validate_robot_version_model(request_body.get('version')),
-            'serial': request_body.get('model') + "-" + request_body.get('version'),
-            'created': request_body.get('created')
-        }
-        robot_obj = Robot.objects.create(**validated_robot_data)      
-        return JsonResponse({'Cоздан робот': {"model":robot_obj.model,
-                                              "version":robot_obj.version,
-                                              "created":robot_obj.created}},
-                                               json_dumps_params={'ensure_ascii': False},
-                                               content_type='application/json; charset=utf-8')
+    def get(self, request):
+        robots_made = Robot.objects.filter(created__week=current_week)
+        robots_made = [[robot.model, robot.version, robot.serial] for robot in robots_made]
+        df = pd.DataFrame(robots_made, columns=['Модель', 'Версия', 'Количество за неделю'])
+        models_list = df.Модель.unique()
+        df = pd.pivot_table(df,values='Количество за неделю', index=['Модель', 'Версия'], aggfunc='count')
+        with pd.ExcelWriter(FILEPATH, engine='xlsxwriter') as writer:
+            [df.filter(like=model, axis=0).to_excel(writer, startrow=1, startcol=1,
+                                                     sheet_name='Модель '+model) for model in models_list]
+            [value.autofit() for key, value in writer.sheets.items()]
+        return JsonResponse({'report': f' {len(robots_made)} robots are made'})
         
