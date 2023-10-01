@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.auth.models import User, Group
 from django.urls import path, include
 
 urlpatterns = [
@@ -22,3 +23,10 @@ urlpatterns = [
     # path('orders/', include('orders.urls')),
     # path('customers/', include('customers.urls')),
 ]
+
+admin.site.site_header = 'Админ панель'
+admin.site.site_title = 'R4C'
+admin.site.index_title = 'Админка'
+
+admin.site.unregister(User)
+admin.site.unregister(Group)

@@ -1,0 +1,20 @@
+{% extends "admin/base.html" %}
+
+{% load static %}
+
+{% block extrahead %}
+    <link rel="shortcut icon" href="{% static 'R4C/img/R2-D2.ico' %}" height="32px" />
+{% endblock %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">
+        <img src="{% static 'R2-D2.jpeg' %}" height="40px" />
+        {{ site_header }}
+    </a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
