@@ -15,10 +15,10 @@ class RobotView(View):
     def post(self, request):
         request_body = json.loads(request.body)
         validated_robot_data = {
-            'model': validate_robot_version_model(request_body.get('model')),
-            'version': validate_robot_version_model(request_body.get('version')),
+            'model': validate_serial(request_body.get('model')),
+            'version': validate_serial(request_body.get('version')),
             'serial': request_body.get('model') + "-" + request_body.get('version'),
-            'created': request_body.get('created')
+            'created': validate_creation_data(request_body.get('created'))
         }
         robot_obj = Robot.objects.create(**validated_robot_data)      
         return JsonResponse({'Cоздан робот': {"model":robot_obj.model,

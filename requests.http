@@ -1,0 +1,12 @@
+
+### Запись в базу информации о новом роботе
+POST  http://127.0.0.1:8000/robots/robot/
+Content-Type: application/json
+
+{
+    "model": "R2",
+    "version": "D2",
+    "created": "2022-12-31 23:59:55"
+}
+
+
