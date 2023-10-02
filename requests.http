@@ -1,0 +1,10 @@
+### Размещение заказа
+
+POST  http://127.0.0.1:8000/orders/create/
+Content-Type: application/json
+
+{
+    "robot_serial": "41-26",
+    "customer_email": "Luke_skywalker@gmail.com"
+
+}
