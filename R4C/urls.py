@@ -23,7 +23,7 @@ urlpatterns = [
     path('orders/', include('orders.urls')),
     # path('customers/', include('customers.urls')),
 ]
-
+ 
 admin.site.site_header = 'Админ панель'
 admin.site.site_title = 'R4C'
 admin.site.index_title = 'Админка'
