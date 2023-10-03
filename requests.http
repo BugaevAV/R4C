@@ -1,10 +1,22 @@
-### Размещение заказа
+### Размещение заказа, а так же комплектация заказа и отправка если робот такой серии в наличии
 
 POST  http://127.0.0.1:8000/orders/create/
 Content-Type: application/json
 
 {
-    "robot_serial": "41-26",
-    "customer_email": "Luke_skywalker@gmail.com"
+    "robot_serial": "R2-D4",
+    "customer_email": "iustusvir@gmail.com"
+
+}
+
+### Cоздание робота, проверка наличия такой серии в заказах, если да, то оптправка оповещения на почту заказчика
+
+POST  http://127.0.0.1:8000/robots/create/
+Content-Type: application/json
+
+{
+    "model": "R2",
+    "version": "D4",
+    "created": "2023-10-03 23:59:59"
 
 }
